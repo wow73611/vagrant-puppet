@@ -1,0 +1,40 @@
+---
+
+vagrant_provider: "virtualbox"
+
+net_shell: &net_shell
+  # add custom default router
+  - "route add default gw 192.168.10.1"
+  # delete virtualbox default gw 10.0.2.2
+  - "eval `route -n | awk '{ if ($2 == \"10.0.2.2\") print \"route del default gw \" $2; }'`"
+
+servers:
+  - name: puppet-master
+    ssh_username: ubuntu
+    virtualbox:
+      box_name: ubuntu/xenial64
+      box_hostname: puppet-master
+      cpus: 1
+      memory: 1024
+      private_network:
+        ip: "192.168.10.11"
+      #public_network:
+      #  ip: "192.168.10.11"
+      ports:
+        - {guest: 80, host: 1180}
+      shell_inline: *net_shell
+
+  - name: puppet-agent
+    ssh_username: ubuntu
+    virtualbox:
+      box_name: ubuntu/xenial64
+      box_hostname: puppet-agent
+      cpus: 1
+      memory: 1024
+      private_network:
+        ip: "192.168.10.12"
+      #public_network:
+      #  ip: "192.168.10.12"
+      ports:
+        - {guest: 80, host: 1280}
+      shell_inline: *net_shell
