@@ -1,0 +1,4 @@
+#ansible-galaxy install -r requirements.yml -p ./roles -vvv
+
+- src: geerlingguy.puppet
+  name: puppet

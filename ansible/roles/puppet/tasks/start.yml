@@ -1,0 +1,14 @@
+---
+- name: Ensure Puppet server service is started and enabled
+  service:
+    name: "{{ puppet_server_service }}"
+    state: started
+    enabled: yes
+  when: puppet_server_install
+
+- name: Ensure Puppet agent service is started and enabled
+  service:
+    name: "{{ puppet_agent_service }}"
+    state: started
+    enabled: yes
+  when: not puppet_server_install

@@ -62,6 +62,21 @@ def virtualbox_provider(srv, conf_srv)
   end
 end
 
+def ansible_provision(srv, conf_srv)
+  conf_srv["ansibles"].each do |conf_srv_ansible|
+    srv.vm.provision :ansible do |ansible|
+      ansible.host_key_checking = false
+      ansible.playbook = conf_srv_ansible["playbook"]
+      ansible.verbose = conf_srv_ansible["verbose"] if conf_srv_ansible["verbose"]
+      ansible.limit = conf_srv_ansible["limit"] if conf_srv_ansible["limit"]
+      ansible.tags = conf_srv_ansible["tags"] if conf_srv_ansible["tags"]
+      ansible.groups = conf_srv_ansible["groups"] if conf_srv_ansible["groups"]
+      ansible.extra_vars = conf_srv_ansible["extra_vars"] if conf_srv_ansible["extra_vars"]
+      ansible.raw_arguments = conf_srv_ansible["raw_arguments"] if conf_srv_ansible["raw_arguments"]
+    end
+  end
+end
+
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # resolve "stdin: is not a tty warning", related issue and proposed
@@ -83,6 +98,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       if provider == "virtualbox"
         virtualbox_provider(srv,conf_srv)
+      end
+      if conf_srv["ansibles"]
+        ansible_provision(srv,conf_srv)
       end
     end
   end

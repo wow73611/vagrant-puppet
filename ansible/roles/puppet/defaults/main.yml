@@ -1,0 +1,41 @@
+---
+dependencies_deb:
+  - apt-transport-https
+  - ca-certificates
+
+# Support puppet version: "5" or "6"
+puppet_version: "5"
+
+# If true that puppet server and agent will be installed otherwise puppet agent only
+puppet_server_install: false
+
+# Add repo for Debian/Ubuntu
+puppet_apt_key: "https://apt.puppetlabs.com/DEB-GPG-KEY-puppetlabs"
+puppet_apt_deb: "https://apt.puppetlabs.com/puppet{{puppet_version}}-release-{{ ansible_distribution_release }}.deb"
+
+# Add repo for RedHat/CentOS
+puppet_yum_key: "https://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs"
+puppet_yum_rpm: "https://yum.puppet.com/puppet{{puppet_version}}/puppet{{puppet_version}}-release-el-7.noarch.rpm"
+
+# puppet server setting
+puppet_server_package: puppetserver
+puppet_server_service: puppetserver
+puppet_java_args: "-Xms512m -Xmx512m -Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLogger"
+puppet_bin_path: /opt/puppetlabs/bin
+
+# puppet agent setting
+puppet_agent_package: puppet-agent
+puppet_agent_service: puppet
+puppet_agent_configfile: /etc/puppetlabs/puppet/puppet.conf
+
+# The master server to request configurations from.
+puppet_agent_server: puppet
+
+# The environment to request when contacting the master.
+puppet_agent_environment: production
+
+# How often to do a Puppet run, when running as a service.
+puppet_agent_runinterval: 30m
+
+# Enable autosign certificate requests for puppet server
+puppet_autosign_enable: false

@@ -1,0 +1,34 @@
+---
+
+- name: Install puppet dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ dependencies_deb }}"
+
+- name: Add Puppet Labs apt key
+  apt_key:
+    url: "{{ puppet_apt_key }}"
+    state: present
+
+- name: Add Puppet Labs repository
+  apt:
+    deb: "{{ puppet_apt_deb }}"
+    state: present
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  changed_when: false
+
+- name: Install puppet-server package
+  package:
+    name: "{{ puppet_server_package }}"
+    state: present
+  when: puppet_server_install
+
+- name: Install puppet-agent package
+  package:
+    name: "{{ puppet_agent_package }}"
+    state: present
+  when: not puppet_server_install

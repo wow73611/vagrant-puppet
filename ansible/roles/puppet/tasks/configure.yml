@@ -1,0 +1,29 @@
+---
+- name: Copy puppetserver.j2 template to /etc/default/puppetserver
+  template:
+    src: default/puppetserver.j2
+    dest: /etc/default/puppetserver
+    mode: 0644
+  notify: Restart puppet server
+  when: puppet_server_install
+
+- name: Copy puppet.conf.j2 template to /etc/puppetlabs/puppet/puppet.conf
+  template:
+    src: puppet.conf.j2
+    dest: /etc/puppetlabs/puppet/puppet.conf
+    mode: 0644
+
+- name: create puppet soft link to /usr/sbin/puppet
+  file:
+    src: /opt/puppetlabs/puppet/bin/puppet
+    dest: /usr/sbin/puppet
+    state: link
+    force: yes
+
+#- name: Add Puppet bin directory to $PATH
+#  lineinfile: >
+#    dest=/etc/environment
+#    state=present
+#    backrefs=yes
+#    regexp='PATH=(["]*)((?!.*?{{ puppet_bin_path }}).*?)(["]*)$'
+#    line="PATH=\1\2:{{ puppet_bin_path }}\3"

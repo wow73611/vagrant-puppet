@@ -1,0 +1,37 @@
+# {{ ansible_managed }}
+
+# This file can be used to override the default puppet settings.
+# See the following links for more details on what settings are available:
+# - https://puppet.com/docs/puppet/latest/config_important_settings.html
+# - https://puppet.com/docs/puppet/latest/config_about_settings.html
+# - https://puppet.com/docs/puppet/latest/config_file_main.html
+# - https://puppet.com/docs/puppet/latest/configuration.html
+
+[main]
+# The master server to request configurations from. Defaults to puppet.
+server = {{ puppet_agent_server }}
+
+# The node’s certificate name, and the unique identifier it uses when requesting catalogs. Defaults to the fully qualified domain name. 
+certname = {{ ansible_hostname }}
+
+# The environment to request when contacting the master. It’s only a request, though; the master’s ENC can override this if it chooses. Defaults to production.
+environment = {{ puppet_agent_environment }}
+
+# How often to do a Puppet run, when running as a service.
+runinterval = {{ puppet_agent_runinterval }}
+
+{% if puppet_server_install -%}
+[master]
+vardir = /opt/puppetlabs/server/data/puppetserver
+logdir = /var/log/puppetlabs/puppetserver
+rundir = /var/run/puppetlabs/puppetserver
+pidfile = /var/run/puppetlabs/puppetserver/puppetserver.pid
+codedir = /etc/puppetlabs/code
+
+{% if puppet_autosign_enable -%}
+# Whether (and how) to autosign certificate requests. This setting is only relevant on a puppet master acting as a certificate authority (CA).
+# Valid values are true (autosigns all certificate requests), false (disables autosigning certificates), or the absolute path to a file.
+autosign = true
+{% endif -%}
+
+{% endif -%}

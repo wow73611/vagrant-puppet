@@ -1,0 +1,23 @@
+---
+- name: Add Puppet Labs GPG key
+  rpm_key:
+    key: https://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
+    key: "{{ puppet_yum_key }}"
+    state: present
+
+- name: Add Puppet Labs repository
+  package:
+    name: "{{ puppet_yum_rpm }}"
+    state: present
+
+- name: Install puppet-server package
+  package:
+    name: "{{ puppet_server_package }}"
+    state: present
+  when: puppet_server_install
+
+- name: Install puppet-agent package
+  package:
+    name: "{{ puppet_agent_package }}"
+    state: present
+  when: not puppet_server_install

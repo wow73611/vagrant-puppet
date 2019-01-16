@@ -1,0 +1,27 @@
+---
+
+galaxy_info:
+  author: Robin Lin
+  description: Install puppet server and client service.
+  company: 
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.0
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+    - xenial
+  - name: Debian
+    versions:
+    - jessie
+  - name: EL
+    versions:
+    - 7
+  galaxy_tags:
+    - system
+    - configuration
+    - packaging
+    - orchestration
+    - puppet
+
+dependencies: []
