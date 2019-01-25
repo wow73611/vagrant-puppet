@@ -1,4 +1,11 @@
 ---
+#- name: Change JAVA_ARGS to lower memory
+#  lineinfile:
+#    dest: "/etc/default/puppetserver"
+#    regexp: "^JAVA_ARGS=.*"
+#    line: 'JAVA_ARGS="-Xms512m -Xmx512m -XX:MaxPermSize=256m"'
+#    state: "present"
+
 - name: Copy puppetserver.j2 template to /etc/default/puppetserver
   template:
     src: default/puppetserver.j2
